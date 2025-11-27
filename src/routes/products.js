@@ -186,49 +186,4 @@ router.delete('/:id', asyncWrapper(async (req, res, next) => {
 }));
 
 
-
-
-
 export default router;
-
-
-
-//const { pool } = require('../db');
-//const { numValidator, stringValidator, emailValidator } = require('../middlewares/validators');
-//const { AppError, ValidationError, NotFoundError } = require('../middlewares/errorClasses');
-
-//module.exports = router;
-
-function pagination(req, res, next) {
-    if (!req.query.page) {
-        req.page = 2;
-    }
-    if (!req.query.limit) {
-        req.limit = 2;
-    }
-
-    console.log('värdet på req.page i middlewaren ' + req.page);
-    console.log('värdet på req.limit i middlewaren ' + req.limit);
-    next();
-}
-
-function paginationTest(req, res, next) {
-
-    console.log(req.query.page, req.query);
-
-    if (!req.query.page) {
-        req.page = 2;
-        console.log('innanför if', req.query.page, req.query)
-    }
-
-    console.log(req.query.page, req.query);
-
-    next();
-
-}
-
-router.get('/test', paginationTest, (req, res) => {
-
-    console.log(req.page, req.query);
-    res.json({ Test: req.page });
-});
