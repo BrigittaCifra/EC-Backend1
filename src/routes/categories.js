@@ -4,7 +4,7 @@ const router = express.Router();
 import { numValidator, stringValidator, emailValidator, phonenumberValidator } from '../middlewares/validators.js'
 import { AppError, ValidationError, NotFoundError } from '../middlewares/errorClasses.js'
 import { asyncWrapper } from '../utils/tryCatch.js';
-import { getAllCategories } from '../repositories/categoriesRepository.js';
+import { getAllCategories, getCategoryByName } from '../repositories/categoriesRepository.js';
 
 //Hämtar alla kategorier
 router.get('/', asyncWrapper(async (req, res) => {
@@ -32,6 +32,30 @@ router.get('/', asyncWrapper(async (req, res) => {
         Total_antal_produkter: totalAmount,
         //Här används result.length eftersom det kan hända att det finns färre resultat än
         //vad limit vill begränsa det till. Pga detta behöver denna resultat visas dynamiskts
+        Antal_kategorier_som_visas: result.length,
+        Sida: page,
+        Kategorier: result
+    });
+
+}));
+
+//Hämtar kategorier baserat på namn
+router.get('/search', asyncWrapper(async (req, res) => {
+    const nameSearch = stringValidator(req.query.name, 'name');
+
+    const page = numValidator(req.query.page || 1);
+    const limit = numValidator(req.query.limit || 3);
+
+    const offset = (page - 1) * limit;
+
+    const [totalAmount, result] = await getCategoryByName(nameSearch, limit, offset);
+
+    if (result.length === 0) {
+        throw new NotFoundError('Inga kategorier hittades');
+    }
+
+    res.json({
+        Hittade_kategorier: totalAmount,
         Antal_kategorier_som_visas: result.length,
         Sida: page,
         Kategorier: result
