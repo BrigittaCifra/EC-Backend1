@@ -40,12 +40,12 @@ router.get('/', asyncWrapper(async (req, res, next) => {
     //Skickar tillbaka svar till klienten
     //default statuskoden för res är 200 så här anges inte någon speciell statuskod för responsen
     res.json({
-        Total_antal_produkter: totalAmount,
+        totalProducts: totalAmount,
         //Här används result.length eftersom det kan hända att det finns färre resultat än
         //vad limit vill begränsa det till. Pga detta behöver denna resultat visas dynamiskts
-        Antal_produkter_som_visas: result.length,
-        Sida: page,
-        Produkter: result
+        productsShown: result.length,
+        page: page,
+        products: result
     });
 
 }));
@@ -69,10 +69,10 @@ router.get('/search', asyncWrapper(async (req, res, next) => {
     }
 
     res.json({
-        Hittade_produkter: totalAmount,
-        Antal_produkter_som_visas: result.length,
-        Sida: page,
-        Produkter: result
+        productsFound: totalAmount,
+        productsShown: result.length,
+        page: page,
+        products: result
     });
 
 }));
