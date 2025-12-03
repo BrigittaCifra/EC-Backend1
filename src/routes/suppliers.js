@@ -40,12 +40,12 @@ router.get('/', asyncWrapper(async (req, res, next) => {
 
     //Skickar tillbaka svar till klienten
     res.json({
-        Total_antal_Leverantörer: totalAmount,
+        totalSuppliers: totalAmount,
         //Här används result.length eftersom det kan hända att det finns färre resultat än
         //vad limit vill begränsa det till. Pga detta behöver denna resultat visas dynamiskt 
-        Antal_leverantörer_som_visas: result.length,
-        Sida: page,
-        Leverantörer: result
+        suppliersShown: result.length,
+        page: page,
+        suppliers: result
     });
 
 }));
@@ -67,10 +67,10 @@ router.get('/search', asyncWrapper(async (req, res, next) => {
     }
 
     res.json({
-        Hittade_Leverantörer: totalAmount,
-        Antal_leverantörer_som_visas: result.length,
-        Sida: page,
-        Leverantörer: result
+        totalSuppliers: totalAmount,
+        suppliersShown: result.length,
+        page: page,
+        suppliers: result
     });
 
 }));
@@ -206,20 +206,13 @@ router.get('/:id/products', asyncWrapper(async (req, res, next) => {
 
     //Skickar tillbaka svar till klienten
     res.json({
-        Leverantör: supplierName,
-        Antal_produkter_som_leverantören_har: totalAmount,
-        Antal_produkter_som_visas: result.length,
-        Sida: page,
-        Leverantörens_produkter: result
+        supplier: supplierName,
+        totalProducts: totalAmount,
+        productsShown: result.length,
+        page: page,
+        products: result
     });
 
 }));
 
 export default router;
-
-
-//const { pool } = require('../db');
-//const { numValidator, stringValidator, emailValidator, phonenumberValidator } = require('../middlewares/validators');
-//const { AppError, ValidationError, NotFoundError } = require('../middlewares/errorClasses');
-
-//module.exports = router;
