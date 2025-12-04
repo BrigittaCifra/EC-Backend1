@@ -1,5 +1,6 @@
 //Importerar databas anslutningen
 import { pool } from '../config/db.js';
+import { ValidationError } from '../middlewares/errorClasses.js';
 import { numValidator } from '../middlewares/validators.js';
 
 
@@ -27,6 +28,7 @@ export async function getAllSuppliers(limit, offset) {
     //result.rows är en array med objekt och result.rows[0] är det första objektet i arrayen med indexet 0
     //.full_count är egenskapen som innehåller det totala antalet
     if (result.rows.length > 0) {
+        //parsar full_count till ett nummer och validerar det
         totalAmount = numValidator(result.rows[0].full_count, 'full_count');
     } else {
         totalAmount = 0;
@@ -185,22 +187,38 @@ export async function deleteSupplier(id) {
 //hämta alla produkter från en specifik leverantör
 export async function getAllProductsFromSupplier(id, limit, offset) {
 
-    const result = await pool.query(`SELECT products.*,
-    categories.name AS test,
-    COUNT(*) OVER() AS full_count, 
-    suppliers.name AS company 
-    FROM products 
-    INNER JOIN suppliers 
-    ON products.supplier_id = suppliers.supplier_id
-    LEFT JOIN categories 
-    ON products.category_id = categories.category_id 
+    const result = await pool.query(`SELECT 
+    products.*,
+    categories.name AS category,
+    COUNT(*) OVER() AS full_count,
+    suppliers.name AS company
+    FROM suppliers
+    LEFT JOIN products ON products.supplier_id = suppliers.supplier_id
+    LEFT JOIN categories ON products.category_id = categories.category_id
     WHERE suppliers.supplier_id = $1
     LIMIT $2 OFFSET $3`,
         [id, limit, offset]
     );
 
-    const totalAmount = numValidator(result.rows[0].full_count, 'full_count');
+    //Kollar om leverantören finns
+    //Eftersom queryn använder LEFT JOIN och startar med suppliers tabellen
+    //så kommer leverantören alltid att finnas med i resultatet även om den inte har några produkter
+    if (result.rows.length === 0) {
+        throw new ValidationError('No supplier found with id: ' + id);
+    }
+
+    //sparar leverantörens namn
     const supplierName = result.rows[0].company || null;
+
+    let totalAmount;
+
+    //kollar om produkter finns för leverantören genom att kolla full_count värdet
+    //om värde är 0 betyder det att inga produkter finns
+    if (result.rows[0].full_count > 0) {
+        totalAmount = numValidator(result.rows[0].full_count, 'full_count')
+    } else {
+        totalAmount = 0;
+    }
 
     for (let rows of result.rows) {
         delete rows.full_count
