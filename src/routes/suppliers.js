@@ -110,7 +110,7 @@ router.post('/', asyncWrapper(async (req, res, next) => {
 
     const result = await createSupplier(name, contact_person_firstname, contact_person_secondname, email, phonenumber, country);
 
-    res.status(201).json(result);
+    res.status(201).json({ message: 'Supplier created successfully', result });
 
 }));
 
@@ -134,7 +134,7 @@ router.put('/:id', asyncWrapper(async (req, res, next) => {
         throw new NotFoundError('No supplier found with id: ' + id);
     }
 
-    res.json(result);
+    res.json({ message: 'Supplier updated successfully', result });
 
 }));
 
@@ -150,7 +150,7 @@ router.patch('/:id/name', asyncWrapper(async (req, res, next) => {
         throw new NotFoundError('No supplier found with id: ' + id);
     }
 
-    res.json(result);
+    res.json({ message: 'Name patched successfully', result });
 
 }));
 
@@ -166,7 +166,7 @@ router.patch('/:id/country', asyncWrapper(async (req, res, next) => {
         throw new NotFoundError('No supplier found with id: ' + id);
     }
 
-    res.json(result);
+    res.json({ message: 'Country patched successfully', result });
 
 }));
 

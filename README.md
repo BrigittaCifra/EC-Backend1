@@ -1,5 +1,6 @@
 # EC-Backend1
 
+Filstruktur
 ```
 Projekt
 ├───node_modules

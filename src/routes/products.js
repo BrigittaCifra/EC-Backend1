@@ -109,7 +109,7 @@ router.post('/', asyncWrapper(async (req, res, next) => {
 
     const result = await createProduct(name, stock_quantity, price, category_id, supplier_id);
 
-    res.status(201).json(result);
+    res.status(201).json({ message: 'product created successfully', result });
 
 }));
 
@@ -133,7 +133,7 @@ router.put('/:id', asyncWrapper(async (req, res, next) => {
         throw new NotFoundError('No product found with id: ' + id);
     }
 
-    res.json(result);
+    res.json({ message: 'product updated successfully', result });
 
 }));
 
@@ -149,7 +149,7 @@ router.patch('/:id/name', asyncWrapper(async (req, res, next) => {
         throw new NotFoundError('No product found with id: ' + id);
     }
 
-    res.json(result);
+    res.json({ message: 'product name updated successfully', result });
 }));
 
 //Uppdaterar endast stock_quantity för en produkt
@@ -164,7 +164,7 @@ router.patch('/:id/stock_quantity', asyncWrapper(async (req, res, next) => {
         throw new NotFoundError('No product found with id: ' + id);
     }
 
-    res.json(result);
+    res.json({ message: 'product stock quantity updated successfully', result });
 }));
 
 //Tar bort en produkt

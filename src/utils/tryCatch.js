@@ -1,11 +1,13 @@
-//Arrow funktion. Tar emot en route handler som argument.
-//Detta gör myAsyncFunktion dynamisk
-export const asyncWrapper = (route) => {
+//Tar emot en route handler som argument.
+export function asyncWrapper(route) {
 
     //Här skapas en ny async funktion som wrappar den ursprungliga routen.
+    //Denna funktion behövs för att utan den skulle req, res, next inte finnas
+    //i scopen
+
     //myAsyncFunction erbjuder en återanvändbar try-catch struktur.
     //(req, res, next) måste finnas för att Express ska kunna anropa myAsyncFunction korrekt
-    const myAsyncFunction = async (req, res, next) => {
+    async function myAsyncFunction(req, res, next) {
         try {
 
             //Här körs routen som skickas med i (route) parametern.
@@ -18,11 +20,9 @@ export const asyncWrapper = (route) => {
 
             //next skickar feletvidare till error handlern
             next(error);
-
         }
-    };
+    }
 
     //returnerar den asyncrona funktionen
     return myAsyncFunction;
-
-};
+}
