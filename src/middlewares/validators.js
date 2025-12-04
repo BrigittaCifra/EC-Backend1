@@ -10,8 +10,8 @@ export function numValidator(num, param) {
     if (num === undefined || num === null) {
 
         throw new ValidationError(
-            'Param validering misslyckad',
-            { Parameter: param, Anledning: param + ' är inte iffyld' }
+            'Parameter validation failed',
+            { Parameter: param, Reason: param + ' is not filled in' }
         );
 
     }
@@ -21,13 +21,13 @@ export function numValidator(num, param) {
     if (Number.isNaN(num)) {
 
         throw new ValidationError(
-            'Param validering misslyckad',
-            { Parameter: param, Anledning: num + ' är inte ett nummer' }
+            'Parameter validation failed',
+            { Parameter: param, Reason: num + ' is not a number' }
         );
 
     }
 
-    //Skickar tillbaka numret
+    //Skickar tillbaka det parsade numret
     return num;
 
 }
@@ -40,8 +40,8 @@ export function stringValidator(str, param) {
     if (typeof str !== "string") {
 
         throw new ValidationError(
-            'Param validering misslyckad',
-            { Parameter: param, Anledning: str + ' är inte en sträng' }
+            'Param validation failed',
+            { Parameter: param, Reason: str + ' is not a string' }
         );
 
     };
@@ -51,8 +51,8 @@ export function stringValidator(str, param) {
     if (!str || str.trim().length === 0) {
 
         throw new ValidationError(
-            'Param validering misslyckad',
-            { Parameter: param, Anledning: param + ' är inte iffyld' }
+            'Param validation failed',
+            { Parameter: param, Reason: param + ' is not filled in' }
         );
 
     };
@@ -60,8 +60,8 @@ export function stringValidator(str, param) {
     if (!regex.test(str)) {
 
         throw new ValidationError(
-            'Ogilting sträng',
-            { Parameter: param, Anledning: param + ' måste innehålla tecken mellan a-z' }
+            'Invalid string',
+            { Parameter: param, Reason: param + ' must contain characters between a-z' }
         );
 
     };
@@ -78,16 +78,16 @@ export function emailValidator(email, param) {
     // Kontrollera datatypen först
     if (typeof email !== 'string') {
         throw new ValidationError(
-            'Param validering misslyckad',
-            { Parameter: param, Anledning: param + ' ska skrivas som en sträng' }
+            'Param validation failed',
+            { Parameter: param, Reason: param + ' must be a string' }
         );
     }
 
     //Om det inte finns ett angivet värde
     if (!email || email.trim().length === 0) {
         throw new ValidationError(
-            'Param validering misslyckad',
-            { Parameter: param, Anledning: param + ' är inte iffyld' }
+            'Param validation failed',
+            { Parameter: param, Reason: param + ' is not filled in' }
         );
     };
 
@@ -96,7 +96,7 @@ export function emailValidator(email, param) {
     // for a match between a regular expression and a specified string. Returns true if there is a match; false otherwise.
     if (!regex.test(email)) {
         throw new ValidationError(
-            'Ogiltig e-post format',
+            'invalid email format',
             { Parameter: param }
         );
     };
@@ -112,22 +112,22 @@ export function phonenumberValidator(phonenumber, param) {
     if (typeof phonenumber !== 'string') {
 
         throw new ValidationError(
-            'Param validering misslyckad',
-            { Parameter: param, Anledning: param + ' ska skrivas som en sträng' }
+            'Param validation failed',
+            { Parameter: param, Reason: param + ' must be a string' }
         );
 
     };
 
     if (!phonenumber || phonenumber.trim().length === 0) {
         throw new ValidationError(
-            'Param validering misslyckad',
-            { Parameter: param, Anledning: param + ' är inte iffyld' }
+            'Param validation failed',
+            { Parameter: param, Reason: param + ' is not filled in' }
         );
     };
 
     if (!regex.test(phonenumber)) {
         throw new ValidationError(
-            'Ogiltig telefonnummer format',
+            'Invalid phone number format',
             { Parameter: param }
         );
     }
@@ -135,10 +135,3 @@ export function phonenumberValidator(phonenumber, param) {
     return phonenumber;
 
 };
-
-//Kolla upp pagination
-
-
-//const { AppError, ValidationError, NotFoundError } = require('./errorClasses');
-
-//module.exports = { numValidator, stringValidator, emailValidator, phonenumberValidator };

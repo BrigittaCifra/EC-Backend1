@@ -23,7 +23,7 @@ router.get('/', asyncWrapper(async (req, res) => {
     //result.rows returnerar [] (tom array) om inget hittas. Därför kollas längden på arrayen
     if (result.length === 0) {
         //skapar en ny error objekt och ändrar error objektets message property
-        throw new NotFoundError('Inga kategorier hittades');
+        throw new NotFoundError('No categories found');
     }
 
     //Skickar tillbaka svar till klienten
@@ -51,7 +51,7 @@ router.get('/search', asyncWrapper(async (req, res) => {
     const [totalAmount, result] = await getCategoryByName(nameSearch, limit, offset);
 
     if (result.length === 0) {
-        throw new NotFoundError('Inga kategorier hittades');
+        throw new NotFoundError('No categories found matching the search criteria');
     }
 
     res.json({

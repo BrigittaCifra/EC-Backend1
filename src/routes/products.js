@@ -34,7 +34,7 @@ router.get('/', asyncWrapper(async (req, res, next) => {
     //result.rows returnerar [] (tom array) om inget hittas. Därför kollas längden på arrayen
     if (result.length === 0) {
         //skapar en ny error objekt och ändrar error objektets message property
-        throw new NotFoundError('Inga produkter hittades');
+        throw new NotFoundError('No products found');
     }
 
     //Skickar tillbaka svar till klienten
@@ -65,7 +65,7 @@ router.get('/search', asyncWrapper(async (req, res, next) => {
 
 
     if (result.length === 0) {
-        throw new NotFoundError('Inga produkter hittades');
+        throw new NotFoundError('No products found matching the search criteria: ' + nameSearch);
     }
 
     res.json({
@@ -88,7 +88,7 @@ router.get('/:id', asyncWrapper(async (req, res, next) => {
     //result.rows[0] returnerar undefined om inga produkter hittas därför används
     //!result här för att kolla om det är falsy och inte result.length === 0
     if (!result) {
-        throw new NotFoundError('Produkten hittades inte');
+        throw new NotFoundError('Product not found with id: ' + id);
     }
 
     res.json(result);
@@ -130,7 +130,7 @@ router.put('/:id', asyncWrapper(async (req, res, next) => {
     const result = await updateProduct(name, stock_quantity, price, category_id, supplier_id, id);
 
     if (!result) {
-        throw new NotFoundError('Produkten hittades inte');
+        throw new NotFoundError('No product found with id: ' + id);
     }
 
     res.json(result);
@@ -146,7 +146,7 @@ router.patch('/:id/name', asyncWrapper(async (req, res, next) => {
     const result = await updateProductName(name, id);
 
     if (!result) {
-        throw new NotFoundError('Produkten hittades inte');
+        throw new NotFoundError('No product found with id: ' + id);
     }
 
     res.json(result);
@@ -161,7 +161,7 @@ router.patch('/:id/stock_quantity', asyncWrapper(async (req, res, next) => {
     const result = await updateProductStockQuantity(stock_quantity, id);
 
     if (!result) {
-        throw new NotFoundError('Produkten hittades inte');
+        throw new NotFoundError('No product found with id: ' + id);
     }
 
     res.json(result);
@@ -178,7 +178,7 @@ router.delete('/:id', asyncWrapper(async (req, res, next) => {
     //pool.query() returnerar alltid ett resultatobjekt, även för DELETE. Resultatobjektet 
     // innehåller bland annat rowCount och rows
     if (!result) {
-        throw new NotFoundError('Inga produkter hittades med id:t ' + id);
+        throw new NotFoundError('No product found with id: ' + id);
     }
 
     res.status(204).send();

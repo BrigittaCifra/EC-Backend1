@@ -35,7 +35,7 @@ router.get('/', asyncWrapper(async (req, res, next) => {
     //Guard clause. Throw kommer att avsluta routen tidigt
     if (result.length === 0) {
         //skapar en ny error objekt och ändrar error objektets message property
-        throw new NotFoundError('Inga leverantörer hittades');
+        throw new NotFoundError('No suppliers found');
     }
 
     //Skickar tillbaka svar till klienten
@@ -63,7 +63,7 @@ router.get('/search', asyncWrapper(async (req, res, next) => {
     const [totalAmount, result] = await getSupplierByName(nameSearch, limit, offset);
 
     if (result.length === 0) {
-        throw new NotFoundError('Inga leverantörer hittades');
+        throw new NotFoundError('No suppliers found matching the search criteria: ' + nameSearch);
     }
 
     res.json({
@@ -85,7 +85,7 @@ router.get('/:id', asyncWrapper(async (req, res, next) => {
 
     //Kastar error om leverantören med det angivna id:t inte finns
     if (!result) {
-        throw new NotFoundError('ingen leverantör hittades med id:t ' + id);
+        throw new NotFoundError('No supplier found with id: ' + id);
     }
 
     //Skickar tillbaka svar till klienten
@@ -131,7 +131,7 @@ router.put('/:id', asyncWrapper(async (req, res, next) => {
     const result = await updateSupplier(name, contact_person_firstname, contact_person_secondname, email, phonenumber, country, id);
 
     if (!result) {
-        throw new NotFoundError('Leverantören hittades inte');
+        throw new NotFoundError('No supplier found with id: ' + id);
     }
 
     res.json(result);
@@ -147,7 +147,7 @@ router.patch('/:id/name', asyncWrapper(async (req, res, next) => {
     const result = await updateSupplierName(name, id);
 
     if (!result) {
-        throw new NotFoundError('Leverantören hittades inte');
+        throw new NotFoundError('No supplier found with id: ' + id);
     }
 
     res.json(result);
@@ -163,7 +163,7 @@ router.patch('/:id/country', asyncWrapper(async (req, res, next) => {
     const result = await updateSupplierCountry(country, id);
 
     if (!result) {
-        throw new NotFoundError('Leverantören hittades inte');
+        throw new NotFoundError('No supplier found with id: ' + id);
     }
 
     res.json(result);
@@ -180,7 +180,7 @@ router.delete('/:id', asyncWrapper(async (req, res, next) => {
     //pool.query() returnerar alltid ett resultatobjekt, även för DELETE. Resultatobjektet 
     // innehåller bland annat rowCount och rows
     if (!result) {
-        throw new NotFoundError('Inga leverantörer hittades med id:t ' + id);
+        throw new NotFoundError('No supplier found with id: ' + id);
     }
 
     res.status(204).send();
@@ -201,7 +201,7 @@ router.get('/:id/products', asyncWrapper(async (req, res, next) => {
     const [totalAmount, supplierName, result] = await getAllProductsFromSupplier(id, limit, offset);
 
     if (result.length === 0) {
-        throw new NotFoundError('Inga produkter hittades för leverantören');
+        throw new NotFoundError('No products found for supplier with id: ' + id);
     }
 
     //Skickar tillbaka svar till klienten
