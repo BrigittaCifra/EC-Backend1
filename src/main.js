@@ -36,8 +36,9 @@ app.use(errorHandler);
 
 // Server start
 const PORT = process.env.APP_PORT;
-app.listen(PORT, () => {
-    console.log(`Server körs på http://localhost:${PORT}`);
+const HOST = process.env.DB_HOST;
+app.listen(PORT, HOST, () => {
+    console.log(`The server is running at http://${HOST}:${PORT}`);
 });
 
-console.log('Servern är nu avstängd');
+console.log('The server is now stopped');
